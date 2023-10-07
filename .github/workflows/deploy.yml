@@ -39,4 +39,4 @@ jobs:
           rm -rf ./console/*
         after_script: |
           mv -v /home/pharmacy/public_html/console/app/* /home/pharmacy/public_html/console
-          rm -rf /home/pharmacy/public_html/console/app/
+          rm -rf /home/pharmacy/public_html/console/app
