@@ -18,6 +18,25 @@ export function getFirebasePublicUrl(fullpath: string, condition?: string): stri
 }
 
 /**
+ * Convert string date time to MySql date format
+ * 
+ * @param inputDate string
+ * @return string
+ */
+export const MYSQL_DATE_FORMAT = (inputDate: string | Date) => {
+    if (!inputDate) return null
+    
+    let jsDate = new Date(inputDate)
+    const [date, month, year] = [
+        jsDate.getDate() < 10 ? '0' + jsDate.getDate() : jsDate.getDate(),
+        (jsDate.getMonth() + 1) < 10 ? '0' + (jsDate.getMonth() + 1) : (jsDate.getMonth() + 1),
+        jsDate.getFullYear() < 10 ? '0' + jsDate.getFullYear() : jsDate.getFullYear()
+    ]
+
+    return `${year}-${month}-${date}`
+}
+
+/**
  * Converts a UTC date/time string to local date/time string.
  *
  * @param dateTimeString - The UTC date/time string to be converted.

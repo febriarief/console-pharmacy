@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal'
 import { ToastrService } from 'ngx-toastr'
-import { ERROR_API_RESPONSE, LOCAL_DATE_FORMAT, UTC_TO_LOCAL_TIME } from 'src/app/helpers'
+import { ERROR_API_RESPONSE, LOCAL_DATE_FORMAT, MYSQL_DATE_FORMAT, UTC_TO_LOCAL_TIME } from 'src/app/helpers'
 import { StockCardService } from 'src/app/services'
 import { environment } from 'src/environments/environment'
 
@@ -322,7 +322,10 @@ export class StockCardComponent implements OnInit
         if (!valid) return
 
         this.loading.export = true
-        const url = `${environment.webUrl}/master-item/stock-card/export-excel?from=${this.modalForm.from}&to=${this.modalForm.to}`        
+        
+        const from = MYSQL_DATE_FORMAT(this.modalForm.from)
+        const to = MYSQL_DATE_FORMAT(this.modalForm.to)
+        const url = `${environment.webUrl}/master-item/stock-card/export-excel?from=${from}&to=${to}`        
         window.open(url, "_blank")
         this.loading.export = false
 
