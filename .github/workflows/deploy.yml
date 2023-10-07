@@ -36,7 +36,7 @@ jobs:
         scp_source: ./dist/app/
         scp_target: /home/pharmacy/public_html/console/
         before_script: |
-          rm -rf ./console/*
+          rm -rf /home/pharmacy/public_html/console/*
         after_script: |
           mv -v /home/pharmacy/public_html/console/app/* /home/pharmacy/public_html/console
           rm -rf /home/pharmacy/public_html/console/app
