@@ -1,0 +1,278 @@
+<div class="animated animated-fade-in-up fade-in-up">
+    <div class="mb-5 card border-0 shadow">
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between">
+                <h5 class="font-family-medium font-weight-bold">
+                    <i class="me-2 fa-duotone fa-file-invoice"></i>
+                    Order Pembelian
+                </h5>
+
+                <button *hasPermission="modulePermission + 'Create'" type="button" class="float-end btn btn-sm btn-primary shadow-sm" (click)="createData()">
+                    <i class="me-2 fa-solid fa-plus"></i>Tambah Data
+                </button>
+            </div>
+
+            <form class="mt-4 d-flex align-items-center">
+                <div class="input-group w-auto me-4">
+                    <input type="text" class="form-control input-append" id="filter-name" name="name" [(ngModel)]="filter.name" placeholder="cari nomor po" autocomplete="off" />
+                    <div class="input-group-append" role="button" (click)="loadData()">
+                        <span class="input-group-text text-muted">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <c-dropdown alignment="start" variant="nav-item" class="mx-4">
+                    <div role="button" cDropdownToggle [caret]="false" [ngClass]="filter.sort ? 'text-primary' : ''">
+                        <i class="fa-duotone fa-arrow-down-wide-short"></i>&nbsp;&nbsp; <span class="font-family-bold">Sortir</span>
+                    </div>
+                    
+                    <ul cDropdownMenu style="min-width:10rem" class="border-0 shadow">                                    
+                        <li>
+                            <div cDropdownItem role="button" class="px-2" (click)="sort('id-asc')">
+                                <ng-container *ngIf="filter.sort === 'id-asc'">
+                                    <i class="me-2 fa-regular fa-check"></i> 
+                                </ng-container>
+
+                                <ng-container *ngIf="filter.sort !== 'id-asc'">
+                                    <i class="me-3 fa-solid"></i>&nbsp;
+                                </ng-container>
+
+                                Nomor PO meningkat
+                            </div>
+                        </li>     
+                        <li>
+                            <div cDropdownItem role="button" class="px-2" (click)="sort('id-desc')">
+                                <ng-container *ngIf="filter.sort === 'id-desc'">
+                                    <i class="me-2 fa-regular fa-check"></i> 
+                                </ng-container>
+
+                                <ng-container *ngIf="filter.sort !== 'id-desc'">
+                                    <i class="me-3 fa-solid"></i>&nbsp;
+                                </ng-container>
+                                
+                                Nomor PO menurun
+                            </div>
+                        </li>     
+                    </ul>
+                </c-dropdown>
+            </form>
+
+            <table class="mt-4 table table-hover shadow-sm">
+                <thead>
+                    <tr class="bg-light">
+                        <th class="p-3">No</th>
+                        <th class="p-3">Nomor PO</th>
+                        <th class="p-3">Total</th>
+                        <th class="p-3">Tanggal</th>
+                        <th class="p-3">Catatan</th>
+                        <th class="p-3">Dibuat Oleh</th>
+                        <th class="p-3 text-center">Aksi</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <ng-container *ngIf="loadingData">
+                        <tr *ngFor="let array of fakeArray">
+                            <td><div class="bg-white"><ngx-skeleton-loader [theme]="{ 'border-radius': '5px', 'background-color': '#e9e9e9', 'margin-bottom': '0px' }"></ngx-skeleton-loader></div></td>
+                            <td><div class="bg-white"><ngx-skeleton-loader [theme]="{ 'border-radius': '5px', 'background-color': '#e9e9e9', 'margin-bottom': '0px' }"></ngx-skeleton-loader></div></td>
+                            <td><div class="bg-white"><ngx-skeleton-loader [theme]="{ 'border-radius': '5px', 'background-color': '#e9e9e9', 'margin-bottom': '0px' }"></ngx-skeleton-loader></div></td>
+                            <td><div class="bg-white"><ngx-skeleton-loader [theme]="{ 'border-radius': '5px', 'background-color': '#e9e9e9', 'margin-bottom': '0px' }"></ngx-skeleton-loader></div></td>
+                            <td><div class="bg-white"><ngx-skeleton-loader [theme]="{ 'border-radius': '5px', 'background-color': '#e9e9e9', 'margin-bottom': '0px' }"></ngx-skeleton-loader></div></td>
+                            <td><div class="bg-white"><ngx-skeleton-loader [theme]="{ 'border-radius': '5px', 'background-color': '#e9e9e9', 'margin-bottom': '0px' }"></ngx-skeleton-loader></div></td>
+                            <td><div class="bg-white"><ngx-skeleton-loader [theme]="{ 'border-radius': '5px', 'background-color': '#e9e9e9', 'margin-bottom': '0px' }"></ngx-skeleton-loader></div></td>
+                        </tr>
+                    </ng-container>
+
+                    <ng-container *ngIf="!loadingData">
+                        <tr *ngFor="let row of data | paginate: { id: 'suppliers',
+                            itemsPerPage: itemsPerPage,
+                            currentPage: currentPage,
+                            totalItems: totalItems }; let i = index">
+
+                            <td class="px-3 align-middle">{{ ((currentPage - 1) * itemsPerPage) + i + 1 }}</td>
+                            <td class="px-3 align-middle">{{ row.id }}</td>
+                            <td class="px-3 align-middle">{{ row.total | rupiahPipe }}</td>
+                            <td class="px-3 align-middle">{{ row.created_at_parsed }}</td>
+                            <td class="px-3 align-middle">{{ row.note }}</td>
+                            <td class="px-3 align-middle">{{ row.created_by }}</td>
+                            <td class="px-3 text-center align-middle">
+                                <c-dropdown alignment="end" variant="nav-item">
+                                    <div cDropdownToggle [caret]="false">
+                                        <i role="button" class="px-3 fa-light fa-ellipsis-stroke-vertical"></i>
+                                    </div>
+                                    
+                                    <ul cDropdownMenu style="min-width:10rem" class="border-0 shadow">                                    
+                                        <li>
+                                            <div cDropdownItem role="button" class="px-2" (click)="viewData(row)">
+                                                <i class="me-2 fa-duotone fa-eye"></i><span class="font-family-bold">Lihat</span>
+                                            </div>
+                                        </li>     
+                                        <li>
+                                            <div cDropdownItem role="button" class="px-2" (click)="downloadPdf(row.id)">
+                                                <i class="me-2 fa-duotone fa-file-pdf"></i><span class="font-family-bold">Download PDF</span>
+                                            </div>
+                                        </li>     
+                                    </ul>
+                                </c-dropdown>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+
+            <div class="mt-4 row">
+                <div class="col-6 font-family-bold">Total Item: {{ totalItems }}</div>
+                <div class="col-6 text-end">
+                    <pagination-controls [hidden]="loadingData" id="suppliers" previousLabel="" nextLabel="" [autoHide]="true" (pageChange)="loadData($event)"></pagination-controls>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal form -->
+<ng-template #formModal>
+    <div class="modal-header border-0">
+        <h5 class="font-family-bold">{{ formTitle }}</h5>
+        <div role="button" class="ms-auto" (click)="closeForm()">
+            <i class="fa-regular fa-circle-xmark fa-xl text-black"></i>
+        </div>
+    </div>
+
+    <div class="modal-body">
+        <div [hidden]="!viewMode" class="text-primary text-end mb-4">
+            <span role="button" (click)="downloadPdf(form.id)">
+                <i class="me-21 fa-solid fa-file-pdf"></i>
+                Download PDF
+            </span>
+        </div>
+        
+        <div class="row">
+            <div class="mb-3 col-md-3">
+                <label for="name" class="mb-2 font-family-bold">Nomor PO</label>
+                <input type="text" readonly class="form-control form-control-sm" placeholder="(dibuat otomatis)" [ngModel]="form.id" autocomplete="off" />
+            </div>
+
+            <div class="mb-3 col-md-3">
+                <label for="pr_date" class="mb-2 font-family-bold">Tanggal PO</label>
+                <div class="position-relative">
+                    <input type="text" readonly class="form-control form-control-sm" id="pr_date" name="pr_date" [(ngModel)]="currentDate" placeholder="tanggal pr" autocomplete="off" />
+                    <div [hidden]="!loading.date" class="position-absolute top-50 end-0 translate-middle">
+                        <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3 col-md-3">
+                <label for="pr_date" class="mb-2 font-family-bold">Dibuat Oleh</label>
+                <input type="text" readonly class="form-control form-control-sm" id="pr_date" name="created_by" [ngModel]="form.created_by" placeholder="nama user" autocomplete="off" />
+            </div>
+        </div>
+
+        <hr class="my-2"/>
+
+        <h5 class="mt-3 font-family-light">{{ viewMode ? 'List Barang' : 'Tambah Barang' }} (dari nomor PR)</h5>
+
+        <div [hidden]="viewMode" class="mt-3 mb-3 row">
+            <div class="col-md-3">
+                <ng-select [loading]="loading.purchase_request" (search)="onSearchPR($event)" [items]="options.purchase_request" bindLabel="id" bindValue="id" placeholder="ketik untuk mencari..." [(ngModel)]="selectedPR"></ng-select>
+            </div>
+            
+            <div class="col-md-3">
+                <button type="button" class="btn btn-sm btn-primary shadow-sm" (click)="addFormDetail()">
+                    <i class="me-2 fa-light fa-plus"></i> Tambah Data PR
+                </button>
+            </div>
+        </div>
+
+        <table class="mt-4 mb-4 table shadow-sm">
+            <thead>
+                <tr class="bg-light">
+                    <th class="p-3">Barang</th>
+                    <th class="p-3">Supplier</th>
+                    <th class="p-3">QTY</th>
+                    <th class="p-3">Satuan</th>
+                    <th class="p-3">Harga</th>
+                </tr>
+            </thead>
+
+            <tbody *ngIf="dataDetail.length === 0">
+                <tr><td colspan="5">tidak ada data ditemukan.</td></tr>
+            </tbody>
+
+            <ng-container *ngIf="dataDetail.length > 0">
+                <tbody *ngFor="let detail of dataDetail; let counter = index">
+                    <tr>
+                        <td colspan="5">
+                            <div class="d-flex align-items-center">
+                                <div [hidden]="viewMode" role="button" (click)="deleteFormDetail(counter)">
+                                    <i class="text-danger fa-solid fa-trash"></i>
+                                </div>
+
+                                <div class="ms-3">
+                                    <div class="font-family-bold">{{ detail.id }}</div>
+                                    <div class="text-muted fst-italic">{{ detail.note }}</div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr *ngFor="let pr_detail of (detail?.purchase_request_detail || []); let i = index">
+                        <td class="align-middle">{{ pr_detail.item_name }}</td>
+                        <td class="align-middle">{{ pr_detail.supplier_name }}</td>
+                        <td class="align-middle">{{ (pr_detail.qty || 0) | numberPipe }}</td>
+                        <td class="align-middle">{{ pr_detail.item_unit }}</td>
+                        <td class="d-flex align-items-center">
+                            <ng-container *ngIf="!viewMode">
+                                <input class="form-control w-auto" placeholder="harga" [(ngModel)]="pr_detail.price" currencyMask
+                                    [options]="{ prefix: '', thousands: '.', precision: 0, align: 'left' }" (ngModelChange)="countTotal()"/>
+    
+                                <div class="ms-2 small text-danger error-input">{{ formDetailValidation?.[detail.id]?.[i]?.price }}</div>
+                            </ng-container>
+
+                            <ng-container *ngIf="viewMode">
+                                {{ pr_detail.price | rupiahPipe }}
+                            </ng-container>
+                        </td>
+                    </tr>
+                </tbody>
+            </ng-container>
+
+            <tfoot>
+                <tr><td colspan="5"></td></tr>
+                <tr>
+                    <td colspan="4"><div class="text-end font-family-bold">Total</div></td>
+                    <td>{{ total | rupiahPipe }}</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <hr class="my-2"/>
+
+        <div class="mt-3 row">
+            <div class="col-md-4">
+                <label for="note" class="mb-2 font-family-bold">Catatan</label>
+                <textarea [readOnly]="viewMode" type="text" class="form-control form-control-sm" id="note" name="note" [(ngModel)]="form.note" placeholder="catatan" autocomplete="off"></textarea>
+            </div>
+        </div>
+
+        <div class="mt-5 d-flex justify-content-end">
+            <button [disabled]="isSubmitting" type="button" class="btn btn-sm btn-secondary shadow-sm" (click)="closeForm()">
+                <i class="me-2 fa-regular fa-rotate-left"></i>Kembali
+            </button>
+
+            <button [hidden]="viewMode" [disabled]="isSubmitting" type="button" class="ms-3 btn btn-sm btn-primary shadow-sm" (click)="save()">
+                <ng-container *ngIf="isSubmitting">
+                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    menyimpan...
+                </ng-container>
+            
+                <ng-container *ngIf="!isSubmitting">
+                    <i class="me-2 fa-regular fa-floppy-disk"></i>Simpan
+                </ng-container>
+            </button>
+        </div>
+    </div>
+</ng-template>

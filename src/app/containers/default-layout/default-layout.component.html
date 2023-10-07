@@ -1,0 +1,23 @@
+<c-sidebar #sidebar="cSidebar" class="d-print-none sidebar sidebar-fixed" id="sidebar" visible [unfoldable]="unfoldableSidebar">
+    <c-sidebar-brand [brandFull]="{ src: '', width: 80 }" [brandNarrow]="{ src: '', width: 30 }" routerLink="./"></c-sidebar-brand>
+    
+    <perfect-scrollbar [config]="perfectScrollbarConfig">
+        <c-sidebar-nav [navItems]="navItems"></c-sidebar-nav>
+    </perfect-scrollbar>
+
+    <c-sidebar-toggler toggle="unfoldable" cSidebarToggle="sidebar" (click)="onSidebarTogglerClick()"></c-sidebar-toggler>
+</c-sidebar>
+
+<div class="wrapper d-flex flex-column min-vh-100 bg-light dark:bg-transparent">
+    <app-default-header class="d-print-none header header-sticky shadow-sm" position="sticky" sidebarId="sidebar"></app-default-header>
+    
+    <c-container [fluid]="true" class="mb-4 ps-4">
+        <c-breadcrumb-router class="ms-2"></c-breadcrumb-router>
+    </c-container>
+
+    <div class="body flex-grow-1 px-4">
+        <router-outlet></router-outlet>
+    </div>
+    
+    <app-default-footer class="bg-light"></app-default-footer>
+</div>

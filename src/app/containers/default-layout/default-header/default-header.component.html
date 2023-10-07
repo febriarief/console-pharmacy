@@ -1,0 +1,56 @@
+<ng-container>
+    <c-container [fluid]="true">        
+        <c-header-nav class="d-none d-lg-flex me-auto">
+            <img style="height:50px" src="assets/images/logo.png"/>
+            <div class="ms-3 my-auto">
+                <span class="h4 font-family-bold">Pharmacy App</span>
+            </div>
+        </c-header-nav>
+
+        <c-header-nav class="d-none d-lg-flex">
+            <c-nav-item>
+                <!-- <a cNavLink class="header-nav-icon"><i class="fa-regular fa-bell"></i></a> -->
+            </c-nav-item>
+        </c-header-nav>
+
+        <c-header-nav class="ms-3">
+            <ng-container *ngTemplateOutlet="userDropdown"></ng-container>
+        </c-header-nav>
+    </c-container>
+    
+    <!-- <c-header-divider></c-header-divider> -->
+    
+    <!-- <c-container [fluid]="true">
+        <c-breadcrumb-router class="ms-2"></c-breadcrumb-router>
+    </c-container> -->
+</ng-container>
+
+
+<ng-template #userDropdown>
+    <c-dropdown alignment="end" variant="nav-item">
+        <button cButton color="" [caret]="false" cDropdownToggle class="py-0">
+            <c-avatar cTextColor="primary" shape="rounded-1" size="md" [src]="avatar" status="primary"></c-avatar>
+        </button>
+        
+        <ul cDropdownMenu class="pt-0 pr-5 w-auto border-0 shadow">   
+            <li class="mt-2 pt-2 px-3">
+                <div class="font-family-bold fw-bold">{{ user.name }}</div>
+                <div class="mt-1 font-family-medium text-black">{{ user?.roles[0]?.name }}</div>
+            </li>    
+
+            <hr/>
+
+            <!-- <li class="mt-2">
+                <a cDropdownItem (click)="goToAccountDetail()" href="javascript:void(0)">
+                    <i class="me-2 fa-light fa-user-gear"></i> Account
+                </a>
+            </li>     -->
+
+            <li class="mt-2">
+                <a cDropdownItem (click)="logout()" href="javascript:void(0)">
+                    <i class="me-2 fa-regular fa-right-from-bracket"></i> Log Out
+                </a>
+            </li>        
+        </ul>
+    </c-dropdown>
+</ng-template>

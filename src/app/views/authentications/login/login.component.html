@@ -1,0 +1,68 @@
+<div class="row g-0 min-vh-100">
+    <div class="col-md-6 bg-primary">
+        <div class="h-100 d-flex justify-content-center align-items-center">
+            <div class="">
+                <img src="assets/images/pharmacist.png" class="mx-auto" style="height:450px" />
+                
+
+                <!-- <c-carousel [interval]="8000">
+                    <c-carousel-indicators></c-carousel-indicators>
+                    <c-carousel-inner>
+                        <c-carousel-item *ngFor="let slide of slides">
+                            <div class="d-flex align-items-center">
+                                <img [src]="slide.src" class="mx-auto" style="height:300px" />
+                            </div>
+
+                            <h5 class="font-family-bold text-white text-center">{{ slide.title }}</h5>
+                            <div class="text-white text-center">{{ slide.message }}</div>
+                        </c-carousel-item>
+                    </c-carousel-inner>
+                </c-carousel> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="mx-5 h-100 d-flex justify-content-center align-items-center">
+            <div class="flex-fill mx-5">
+                <div class="mx-5">
+                    <img class="mx-auto d-block" style="margin-top:-120px" src="assets/images/logo.png" width="140px">
+                    
+                    <h4 class="mt-4 font-family-bold">Selamat datang,</h4>
+                    <div class="text-muted">silahkan masukkan email dan kata sandi untuk melanjutkan</div>
+                    
+                    <form (ngSubmit)="login()" class="mt-4">
+                        <input type="text" class="form-control" id="email" name="email" [(ngModel)]="form.email" placeholder="email" autocomplete="off">
+                        <div class="mt-1 small text-danger error-input">{{ formValidation.email.message }}</div>
+                        
+                        <div class="mt-3 input-group">
+                            <input [type]="isSecuredPassword ? 'password' : 'text'" class="form-control input-append" id="password" name="password" [(ngModel)]="form.password" placeholder="kata sandi" autocomplete="off" />
+                            <div class="input-group-append" role="button" (click)="toggelSecurePassword()">
+                                <span class="input-group-text text-muted">
+                                    <i *ngIf="isSecuredPassword" class="fa fa-eye"></i>
+                                    <i *ngIf="!isSecuredPassword" class="fa fa-eye-slash"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="mt-1 small text-danger error-input">{{ formValidation.password.message }}</div>
+
+                        <div class="mt-4 d-grid gap-2">
+                            <button type="submit" class="btn btn-primary" [disabled]="submiting">
+                                <ng-container *ngIf="submiting">
+                                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                                    memproses data...
+                                </ng-container>
+                            
+                                <ng-container *ngIf="!submiting">Masuk</ng-container>
+                            </button>
+                        </div>
+    
+                        <div class="mt-1 small text-danger error-input">{{ formValidation.login.message }}</div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  

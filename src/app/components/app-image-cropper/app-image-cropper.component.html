@@ -1,0 +1,54 @@
+<div>
+    <button type="button" class="btn btn-sm btn-primary" (click)="openModal(template)">
+        <i class="me-1 fa-light fa-images"></i>
+        choose image
+    </button>
+</div>
+
+<ng-template #template>
+    <div class="modal-header border-0 text-left">
+        <h5 class="modal-title">Edit and crop image</h5>
+        <div>
+            <a href="javascript:void(0)" class="close" (click)="closeModal()" aria-label="Close">
+                <i class="fa-light fa-circle-xmark text-black" style="font-size:20px"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="modal-body border-0">
+        <input *ngIf="!imageChangedEvent" type="file" (change)="fileChangeEvent($event)" />
+
+        <div class="row">
+            <div class="col-sm-6">
+                <label *ngIf="imageChangedEvent">Input: </label>
+                <image-cropper
+                    [imageChangedEvent]="imageChangedEvent"
+                    [maintainAspectRatio]="true"
+                    [aspectRatio]="3 / 3"
+                    format="jpeg"
+                    (imageCropped)="imageCropped($event)"
+                ></image-cropper>
+                <div *ngIf="imageChangedEvent" class="text-center">
+                    <button type="button" class="btn btn-sm btn-danger" (click)="deletePhoto()"><i class="fa fa-trash"></i></button>
+                </div>
+            </div>
+
+            <div *ngIf="croppedImage" class="col-sm-6">
+                <label>Output: </label>
+                <img class="img-fluid w-100" [src]="croppedImage"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer border-0 text-right">
+        <button type="button" class="btn btn-sm btn-secondary" (click)="closeModal()">
+            <i class="me-1 fa-light fa-ban"></i>
+            Cancel
+        </button>
+
+        <button type="button" class="ms-3 btn btn-sm btn-primary" (click)="save()">
+            <i class="me-1 fa-light fa-crop"></i>
+            Crop and save
+        </button>
+    </div>
+</ng-template>

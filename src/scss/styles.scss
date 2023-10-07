@@ -1,0 +1,35 @@
+/* You can add global styles to this file, and also import other style files */
+$enable-ltr: true;
+$enable-rtl: true;
+
+// Import styles with default layout.
+@import "@coreui/coreui/scss/coreui";
+
+// perfect scrollbar theming for use with [perfectScrollbar] directive
+//@import '~perfect-scrollbar/css/perfect-scrollbar.css';
+
+@import "layout";
+
+// Some temp fixes
+@import "fixes";
+
+// Prism.js
+@import "examples";
+
+// Bootstrap
+@import "bootstrap/scss/mixins";
+
+// ngx-toastr
+@import 'ngx-toastr/toastr';
+
+// ng-select
+@import "@ng-select/ng-select/themes/default.theme.css";
+
+// Font Awesome Free 6.4.0
+@import "font-awesome";
+
+// If you want to override variables do it here
+@import "variables";
+
+// If you want to add something do it here
+@import "custom";

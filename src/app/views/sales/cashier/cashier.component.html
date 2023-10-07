@@ -1,0 +1,156 @@
+<div #fullScreen [class]="isFullscreen ? 'bg-white p-3 overflow-auto' : ''">
+    <!-- <div class="text-end">
+        <span role="button" (click)="toggleFullscreen()">
+            <i [hidden]="isFullscreen" cTooltip="Full screen" cTooltipPlacement="top" class="p-3 fa-regular fa-lg fa-expand"></i>
+            <i [hidden]="!isFullscreen" cTooltip="Keluar full screen" cTooltipPlacement="top" class="p-3 fa-regular fa-lg fa-compress"></i>
+        </span>
+    </div> -->
+
+    <div class="mt-3 row">
+        <div class="col-md-8">
+            <div class="card border-0 shadow">
+                <div class="card-body p-4">
+                    <table class="mt-4 table table-hover shadow-sm">
+                        <thead>
+                            <tr class="bg-light">
+                                <th class="p-3 text-center" width="5%">No</th>
+                                <th class="p-3" width="50%">Nama Barang</th>
+                                <th class="p-3" width="10%">Qty</th>
+                                <th class="p-3" width="20%">Harga per item</th>
+                                <th class="p-3 text-center" width="15%">Aksi</th>
+                            </tr>
+                        </thead>
+        
+                        <tbody>
+                            <tr *ngFor="let row of data;let i = index">
+                                <td class="text-end align-middle">{{ i + 1 }}</td>
+                                <td>
+                                    <ng-select [items]="options.item" [loading]="loading.item" bindLabel="name" bindValue="name" [(ngModel)]="data[i].item_txt" placeholder="ketik nama barang" 
+                                        (change)="onSelectOptions(i, $event)" (search)="onSearchItem($event)" (ngModelChange)="sumTotal()">
+                                    </ng-select>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm text-end" placeholder="qty" [(ngModel)]="data[i].qty" autocomplete="off" 
+                                        currencyMask [options]="{ prefix: '', thousands: '.', precision: 0, align: 'left' }" (ngModelChange)="sumTotal()" />
+                                </td>
+                                <td>
+                                    <div class="position-relative">
+                                        <input type="text" class="ps-4 form-control form-control-sm text-end" placeholder="harga" [(ngModel)]="data[i].price" autocomplete="off" 
+                                            currencyMask [options]="{ prefix: '', thousands: '.', precision: 0, align: 'left' }" (ngModelChange)="sumTotal()"/>
+                                        
+                                        <div class="position-absolute" style="top:7px;left:10px">Rp</div>
+                                    </div>
+                                </td>
+                                <td class="text-center align-middle">
+                                    <span role="button" cTooltip="Tambah kolom barang" class="px-2" (click)="addItem()">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </span>
+
+                                    <span *ngIf="i != 0" role="button" cTooltip="Hapus kolom barang" class="px-2 text-danger" (click)="removeItem(i)">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow">
+                <div class="card-body p-4">
+                    <h5 class="mb-4 font-family-bold">Ringkasan</h5>
+
+                    <ng-container *ngIf="data[0].item_txt">
+                        <div *ngFor="let item of data; let i = index" class="row mb-1">
+                            <div class="col-md-8 d-flex justfy-content-between">
+                                <div class="me-1">{{ i + 1 }}.</div>
+                                <div class="flex-grow-1 ">{{ item.item_txt }}</div>
+                                <div>x{{ item.qty }}</div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                {{ item.total | rupiahPipe }}
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <hr/>
+
+                    <div class="row mb-1">
+                        <div class="col-md-8">
+                            <div class="text-end">Sub Total</div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            {{ subTotal | rupiahPipe }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-1">
+                        <div class="col-md-8">
+                            <div class="text-end">PPn</div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            Rp 0
+                        </div>
+                    </div>
+
+                    <div class="row mb-1">
+                        <div class="col-md-8">
+                            <div class="text-end">PPh</div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            Rp 0
+                        </div>
+                    </div>
+
+                    <div class="row mb-1">
+                        <div class="col-md-8">
+                            <div class="text-end font-family-bold">Total</div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            {{ total | rupiahPipe }}
+                        </div>
+                    </div>
+
+                    <label for="name" class="mt-3 mb-2 font-family-bold">Uang Diterima</label>
+                    <div class="position-relative">
+                        <input type="text" class="ps-4 form-control form-control-sm text-end" placeholder="pembayaran" autocomplete="off" [(ngModel)]="form.money_received"
+                            currencyMask [options]="{ prefix: '', thousands: '.', precision: 0, align: 'left' }" />
+                        
+                        <div class="position-absolute" style="top:7px;left:10px">Rp</div>
+                    </div>
+
+                    <button [disabled]="isSubmitting" class="mt-3 float-end btn btn-sm btn-primary shadow-sm" (click)="submit()">
+                        <ng-container *ngIf="isSubmitting">
+                            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                            menyimpan...
+                        </ng-container>
+                    
+                        <ng-container *ngIf="!isSubmitting">
+                            <i class="me-2 fa-regular fa-money-bill-wave"></i>Bayar
+                        </ng-container>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal confirmtion -->
+<ng-template #modalConfirmation>
+    <div class="modal-header border-0">
+        <h5 class="font-family-bold">Berhasil</h5>
+        <div role="button" class="ms-auto" (click)="closeModal()">
+            <h4 class="far fa-times-circle"></h4>
+        </div>
+    </div>
+
+    <div class="modal-body pt-0">
+        <span class="h5">{{ modalMessage }}</span>
+    </div>
+
+    <div class="modal-footer border-0">
+        <button type="button" class="btn btn-sm btn-secondary shadow" (click)="closeModal()">Kembali</button>
+    </div>
+</ng-template>

@@ -1,0 +1,19 @@
+<div class="confirm-box">
+    <div class="modal-header border-0">
+        <h5 class="modal-title font-family-bold">{{ title }}</h5>
+    </div>
+
+	<div class="modal-body">
+        <span style="font-size:14px">{{ message }}</span>
+    </div>
+
+    <div class="modal-footer border-0">
+        <button type="button" class="btn btn-sm btn-primary shadow-sm" (click)="confirm()">
+            <i class="me-2 fa-solid fa-check"></i>Ya
+        </button>
+
+        <button type="button" class="btn btn-sm btn-secondary shadow-sm" (click)="decline()">
+            <i class="me-2 fa-solid fa-times"></i>Tidak
+        </button>
+    </div>
+</div>
